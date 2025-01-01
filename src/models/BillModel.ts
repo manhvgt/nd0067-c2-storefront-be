@@ -3,7 +3,6 @@ import pool from '../database';
 export type Bill = {
   id?: number;
   user_id: number;
-  customer_id: number;
   order_ids: number[];
   datetime?: string;
   amount_original: number;
@@ -16,16 +15,14 @@ export class BillModel {
   async create(bill: Bill): Promise<Bill> {
     try {
       const conn = await pool.connect();
-      const sql = `INSERT INTO "Bill" (user_id, customer_id, order_ids, datetime, amount_original, amount_payable, status) 
-                   VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
+      const sql = `INSERT INTO "Bill" (user_id, order_ids, amount_original, amount_payable, status) 
+                   VALUES ($1, $2, $3, $4, $5) RETURNING *`;
       const result = await conn.query(sql, [
         bill.user_id,
-        bill.customer_id,
         bill.order_ids,
-        bill.datetime,
         bill.amount_original,
         bill.amount_payable,
-        bill.status
+        bill.status,
       ]);
       conn.release();
       return result.rows[0];
@@ -34,24 +31,11 @@ export class BillModel {
     }
   }
 
-  // Read bill by ID
-  async getById(id: number): Promise<Bill> {
-    try {
-      const conn = await pool.connect();
-      const sql = `SELECT * FROM "Bill" WHERE id=$1`;
-      const result = await conn.query(sql, [id]);
-      conn.release();
-      return result.rows[0];
-    } catch (err) {
-      throw new Error(`Unable to get bill: ${err}`);
-    }
-  }
-
-  // Read all bills
+  // Get all bills
   async getAll(): Promise<Bill[]> {
     try {
       const conn = await pool.connect();
-      const sql = `SELECT * FROM "Bill"`;
+      const sql = 'SELECT * FROM "Bill"';
       const result = await conn.query(sql);
       conn.release();
       return result.rows;
@@ -60,17 +44,28 @@ export class BillModel {
     }
   }
 
+  // Get bill by ID
+  async getById(id: number): Promise<Bill> {
+    try {
+      const conn = await pool.connect();
+      const sql = 'SELECT * FROM "Bill" WHERE id=$1';
+      const result = await conn.query(sql, [id]);
+      conn.release();
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Unable to get bill: ${err}`);
+    }
+  }
+
   // Update bill by ID
   async update(id: number, bill: Bill): Promise<Bill> {
     try {
       const conn = await pool.connect();
-      const sql = `UPDATE "Bill" SET user_id=$1, customer_id=$2, order_ids=$3, datetime=$4, amount_original=$5, amount_payable=$6, status=$7 
-                   WHERE id=$8 RETURNING *`;
+      const sql = `UPDATE "Bill" SET user_id=$1, order_ids=$2, amount_original=$3, amount_payable=$4, status=$5 
+                   WHERE id=$6 RETURNING *`;
       const result = await conn.query(sql, [
         bill.user_id,
-        bill.customer_id,
         bill.order_ids,
-        bill.datetime,
         bill.amount_original,
         bill.amount_payable,
         bill.status,

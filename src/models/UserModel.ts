@@ -1,6 +1,7 @@
 import pool from '../database';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -10,20 +11,21 @@ export type User = {
   last_name: string;
   email: string;
   mobile: string;
+  gender: string;
   role: string;
   password: string;
   password_hash?: string;
 };
 
-const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env;
+const { BCRYPT_PASSWORD, SALT_ROUNDS, JWT_SECRET } = process.env;
 
 export class UserModel {
-  // Create a new user
-  async create(user: User): Promise<User> {
+  // Create a new user and return JWT
+  async create(user: User): Promise<string> {
     try {
       const conn = await pool.connect();
-      const sql = `INSERT INTO "User" (first_name, last_name, email, mobile, role, password_hash) 
-                   VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+      const sql = `INSERT INTO "User" (first_name, last_name, email, mobile, gender, role, password_hash) 
+                   VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
       const hash = bcrypt.hashSync(
         user.password + BCRYPT_PASSWORD,
         parseInt(SALT_ROUNDS as string, 10)
@@ -33,11 +35,14 @@ export class UserModel {
         user.last_name,
         user.email,
         user.mobile,
+        user.gender,
         user.role,
         hash
       ]);
       conn.release();
-      return result.rows[0];
+      const newUser = result.rows[0];
+      const token = jwt.sign({ id: newUser.id, email: newUser.email }, JWT_SECRET as string, { expiresIn: '24h' });
+      return token;
     } catch (err) {
       throw new Error(`Unable to create user: ${err}`);
     }
@@ -121,8 +126,8 @@ export class UserModel {
     }
   }
 
-  // Authenticate user by password
-  async authenticate(email: string, password: string): Promise<User | null> {
+  // Authenticate user and generate JWT token
+  async authenticate(email: string, password: string): Promise<string | null> {
     try {
       const conn = await pool.connect();
       const sql = `SELECT * FROM "User" WHERE email=$1`;
@@ -130,7 +135,9 @@ export class UserModel {
       if (result.rows.length) {
         const user = result.rows[0];
         if (bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password_hash)) {
-          return user;
+          const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET as string, { expiresIn: '24h' });
+          conn.release();
+          return token;
         }
       }
       conn.release();

@@ -3,7 +3,7 @@ import pool from '../database';
 export type Order = {
   id?: number;
   product_id: number;
-  customer_id: number;
+  user_id: number;
   quantity: number;
   status: string;
   datetime?: string;
@@ -16,16 +16,15 @@ export class OrderModel {
   async create(order: Order): Promise<Order> {
     try {
       const conn = await pool.connect();
-      const sql = `INSERT INTO "Order" (product_id, customer_id, quantity, status, datetime, discount, remark) 
-                   VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
+      const sql = `INSERT INTO "Order" (product_id, user_id, quantity, status, discount, remark) 
+                   VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
       const result = await conn.query(sql, [
         order.product_id,
-        order.customer_id,
+        order.user_id,
         order.quantity,
         order.status,
-        order.datetime,
         order.discount,
-        order.remark
+        order.remark,
       ]);
       conn.release();
       return result.rows[0];
@@ -34,24 +33,11 @@ export class OrderModel {
     }
   }
 
-  // Read order by ID
-  async getById(id: number): Promise<Order> {
-    try {
-      const conn = await pool.connect();
-      const sql = `SELECT * FROM "Order" WHERE id=$1`;
-      const result = await conn.query(sql, [id]);
-      conn.release();
-      return result.rows[0];
-    } catch (err) {
-      throw new Error(`Unable to get order: ${err}`);
-    }
-  }
-
-  // Read all orders
+  // Get all orders
   async getAll(): Promise<Order[]> {
     try {
       const conn = await pool.connect();
-      const sql = `SELECT * FROM "Order"`;
+      const sql = 'SELECT * FROM "Order"';
       const result = await conn.query(sql);
       conn.release();
       return result.rows;
@@ -60,18 +46,30 @@ export class OrderModel {
     }
   }
 
+  // Get order by ID
+  async getById(id: number): Promise<Order> {
+    try {
+      const conn = await pool.connect();
+      const sql = 'SELECT * FROM "Order" WHERE id=$1';
+      const result = await conn.query(sql, [id]);
+      conn.release();
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Unable to get order: ${err}`);
+    }
+  }
+
   // Update order by ID
   async update(id: number, order: Order): Promise<Order> {
     try {
       const conn = await pool.connect();
-      const sql = `UPDATE "Order" SET product_id=$1, customer_id=$2, quantity=$3, status=$4, datetime=$5, discount=$6, remark=$7 
-                   WHERE id=$8 RETURNING *`;
+      const sql = `UPDATE "Order" SET product_id=$1, user_id=$2, quantity=$3, status=$4, discount=$5, remark=$6 
+                   WHERE id=$7 RETURNING *`;
       const result = await conn.query(sql, [
         order.product_id,
-        order.customer_id,
+        order.user_id,
         order.quantity,
         order.status,
-        order.datetime,
         order.discount,
         order.remark,
         id,

@@ -1,7 +1,7 @@
 CREATE TABLE "Order" (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   product_id INT NOT NULL,
-  customer_id INT NOT NULL,
+  user_id INT NOT NULL,
   quantity INT NOT NULL DEFAULT 1,
   status VARCHAR(50) NOT NULL,
   datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -11,8 +11,8 @@ CREATE TABLE "Order" (
     FOREIGN KEY(product_id) 
     REFERENCES "Product"(id)
     ON DELETE CASCADE,
-  CONSTRAINT fk_customer
-    FOREIGN KEY(customer_id) 
-    REFERENCES "Customer"(id)
+  CONSTRAINT fk_user
+    FOREIGN KEY(user_id) 
+    REFERENCES "User"(id)
     ON DELETE CASCADE
 );

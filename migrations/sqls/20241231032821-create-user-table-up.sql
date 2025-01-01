@@ -4,6 +4,7 @@ CREATE TABLE "User" (
   last_name VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL UNIQUE,
   mobile VARCHAR(15) NOT NULL UNIQUE,
+  gender VARCHAR(10) NOT NULL,
   role VARCHAR(50) NOT NULL,
   password_hash VARCHAR(255) NOT NULL
 );
