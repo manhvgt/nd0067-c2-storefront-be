@@ -84,8 +84,14 @@ export class ProductModel {
       const sql = `DELETE FROM "Product" WHERE id=$1 RETURNING *`;
       const result = await conn.query(sql, [id]);
       conn.release();
+      if (result.rows.length === 0) {
+        throw new Error('Product not found');
+      }
       return result.rows[0];
     } catch (err) {
+      if (err instanceof Error && err.message === 'Product not found') {
+        throw { status: 404, message: err.message };
+      }
       throw new Error(`Unable to delete product: ${err}`);
     }
   }

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserModel, User } from '../models/UserModel';
-import { handleError } from '../handlers/errorHandler';
+import { responseError } from '../handlers/errorHandler';
 
 const userModel = new UserModel();
 
@@ -10,7 +10,7 @@ export const index = async (req: Request, res: Response) => {
     const users = await userModel.getAll();
     res.json(users);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -24,7 +24,7 @@ export const show = async (req: Request, res: Response) => {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -35,7 +35,7 @@ export const create = async (req: Request, res: Response) => {
     const token = await userModel.create(user);
     res.status(201).json({ token });
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -46,7 +46,7 @@ export const update = async (req: Request, res: Response) => {
     const updatedUser = await userModel.update(parseInt(req.params.id, 10), user);
     res.json(updatedUser);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -56,6 +56,6 @@ export const remove = async (req: Request, res: Response) => {
     const deletedUser = await userModel.delete(parseInt(req.params.id, 10));
     res.json(deletedUser);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };

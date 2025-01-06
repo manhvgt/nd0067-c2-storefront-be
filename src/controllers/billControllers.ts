@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { BillModel, Bill } from '../models/BillModel';
-import { handleError } from '../handlers/errorHandler';
+import { responseError } from '../handlers/errorHandler';
 
 const billModel = new BillModel();
 
@@ -10,7 +10,7 @@ export const index = async (req: Request, res: Response) => {
     const bills = await billModel.getAll();
     res.json(bills);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -24,7 +24,7 @@ export const show = async (req: Request, res: Response) => {
       res.status(404).json({ message: 'Bill not found' });
     }
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -35,7 +35,7 @@ export const create = async (req: Request, res: Response) => {
     const newBill = await billModel.create(bill);
     res.status(201).json(newBill);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -46,7 +46,7 @@ export const update = async (req: Request, res: Response) => {
     const updatedBill = await billModel.update(parseInt(req.params.id, 10), bill);
     res.json(updatedBill);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -56,6 +56,6 @@ export const remove = async (req: Request, res: Response) => {
     const deletedBill = await billModel.delete(parseInt(req.params.id, 10));
     res.json(deletedBill);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };

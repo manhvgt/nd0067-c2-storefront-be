@@ -20,7 +20,7 @@
     "clean": "tsc --build --clean",
     "build": "npm run clean && tsc --build",
     "test": "npm run build && npx jasmine --config=spec/support/jasmine.json",
-    "start": "nodemon dist/src/index.js",
+    "start": "nodemon dist/src/server.js",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "tsc": "tsc"
   },

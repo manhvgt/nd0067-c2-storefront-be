@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ProductModel, Product } from '../models/ProductModel';
-import { handleError } from '../handlers/errorHandler';
+import { responseError } from '../handlers/errorHandler';
 
 const productModel = new ProductModel();
 
@@ -10,7 +10,7 @@ export const index = async (req: Request, res: Response) => {
     const products = await productModel.getAll();
     res.json(products);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -24,7 +24,7 @@ export const show = async (req: Request, res: Response) => {
       res.status(404).json({ message: 'Product not found' });
     }
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -35,7 +35,7 @@ export const create = async (req: Request, res: Response) => {
     const newProduct = await productModel.create(product);
     res.status(201).json(newProduct);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -46,7 +46,7 @@ export const update = async (req: Request, res: Response) => {
     const updatedProduct = await productModel.update(parseInt(req.params.id, 10), product);
     res.json(updatedProduct);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -56,6 +56,6 @@ export const remove = async (req: Request, res: Response) => {
     const deletedProduct = await productModel.delete(parseInt(req.params.id, 10));
     res.json(deletedProduct);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };

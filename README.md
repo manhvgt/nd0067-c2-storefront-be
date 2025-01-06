@@ -107,18 +107,35 @@ To install, run... Please go to project dirrectory and run below command on term
   `docker ps`
   `docker exec -it <container_name_or_id> bash`
 
-- Create database
+- Create database 
   `psql -U postgres`
   `CREATE DATABASE storedb;`
   `CREATE DATABASE storedb_test;`
 
+- Import test db
+  `docker ps`
+  `docker cp <path_to_host_machine_file.dump> <container_id>:/tmp/storedb_test.dump`
+  `docker exec -it <container_id> pg_restore -U postgres -d <database_name> -c /tmp/storedb_test.dump`
+
+- Export test db (if-neccessary)
+  `docker ps`
+  `docker exec -it <container_id> pg_dump -U postgres -d storedb_test -F c -f /tmp/storedb_test.dump`
+  `docker cp <container_id>:/tmp/storedb_test.dump <path_to_host_machine_file.dump>`
+
 #### Environment Variables
 
-    POSTGRES_HOST='postgres'
-    POSTGRES_PORT='5432'
+    SERVER_HOST='localhost'
+    SERVER_PORT=3000
+    POSTGRES_HOST='localhost'
+    POSTGRES_PORT=5432
     POSTGRES_USER='postgres'
     POSTGRES_PASSWORD='postgres'
     POSTGRES_DB='storedb'
+    POSTGRES_TEST_DB='storedb_test'
+    NODE_ENV='test'
+    BCRYPT_PASSWORD='aSecretKey'
+    SALT_ROUNDS=10
+    JWT_SECRET='jwt_secret_key'
 
 ### Build
 

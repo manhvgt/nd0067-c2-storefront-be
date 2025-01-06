@@ -16,10 +16,14 @@ const port = parseInt(portStr, 10);
 
 app.use(bodyParser.json());
 
+
 app.use('/users', userRoutes);
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 app.use('/bills', billRoutes);
+app.get('/', (req, res) => {
+  res.send(`It works! Server is running on http://${host}:${port}`);
+});
 
 app.listen(port, host, () => {
   console.log(`Server is running on http://${host}:${port}`);

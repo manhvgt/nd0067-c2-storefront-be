@@ -88,8 +88,14 @@ export class OrderModel {
       const sql = `DELETE FROM "Order" WHERE id=$1 RETURNING *`;
       const result = await conn.query(sql, [id]);
       conn.release();
+      if (result.rows.length === 0) {
+        throw new Error('Order not found');
+      }
       return result.rows[0];
     } catch (err) {
+      if (err instanceof Error && err.message === 'Order not found') {
+        throw { status: 404, message: err.message };
+      }
       throw new Error(`Unable to delete order: ${err}`);
     }
   }

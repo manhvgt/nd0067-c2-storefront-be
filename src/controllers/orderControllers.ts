@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { OrderModel, Order } from '../models/OrderModel';
-import { handleError } from '../handlers/errorHandler';
+import { responseError } from '../handlers/errorHandler';
 
 const orderModel = new OrderModel();
 
@@ -10,7 +10,7 @@ export const index = async (req: Request, res: Response) => {
     const orders = await orderModel.getAll();
     res.json(orders);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -24,7 +24,7 @@ export const show = async (req: Request, res: Response) => {
       res.status(404).json({ message: 'Order not found' });
     }
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -35,7 +35,7 @@ export const create = async (req: Request, res: Response) => {
     const newOrder = await orderModel.create(order);
     res.status(201).json(newOrder);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -46,7 +46,7 @@ export const update = async (req: Request, res: Response) => {
     const updatedOrder = await orderModel.update(parseInt(req.params.id, 10), order);
     res.json(updatedOrder);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
 
@@ -56,6 +56,6 @@ export const remove = async (req: Request, res: Response) => {
     const deletedOrder = await orderModel.delete(parseInt(req.params.id, 10));
     res.json(deletedOrder);
   } catch (err) {
-    res.status(500).json({ error: handleError(err) });
+    responseError(res, err);
   }
 };
