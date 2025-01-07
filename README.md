@@ -63,17 +63,32 @@ Project Root Directory
 ├── readme.md
 ├── images
 ├── spec
-│   ├── api
-│   │   └── image.spec.ts
+│   ├── src
+│   │   ├── controllers
+│   │   │   ├── productControllers.spec.ts
+│   │   │   └── userControllers.spec.ts
+│   │   ├── handlers
+│   │   │   ├── authHandler.spec.ts
+│   │   │   └── errorHandler.spec.ts
+│   │   ├── routes
+│   │   │   ├── productRoutes.spec.ts
+│   │   │   └── userRoutes.spec.ts
 │   ├── helpers
+│   │   └── reporter.ts
 │   ├── support
-│   └── index.spec.ts
+│   │   └── jasmine.json
+│   └── server.spec.ts
 ├── src
-│   ├── api
-│   │   └── image.ts
+│   ├── controllers
+│   │   ├── productControllers.ts
+│   │   └── userControllers.ts
 │   ├── handlers
-│   │   └── imageResizer.ts
-│   └── index.ts
+│   │   ├── authHandler.ts
+│   │   └── errorHandler.ts
+│   ├── routes
+│   │   ├── productRoutes.ts
+│   │   └── userRoutes.ts
+│   └── server.ts
 ├── .env
 ├── .gitignore
 ├── package.json
@@ -115,7 +130,7 @@ To install, run... Please go to project dirrectory and run below command on term
 - Import test db
   `docker ps`
   `docker cp <path_to_host_machine_file.dump> <container_id>:/tmp/storedb_test.dump`
-  `docker exec -it <container_id> pg_restore -U postgres -d <database_name> -c /tmp/storedb_test.dump`
+  `docker exec -it <container_id> pg_restore -U postgres -d storedb_test -c /tmp/storedb_test.dump`
 
 - Export test db (if-neccessary)
   `docker ps`
