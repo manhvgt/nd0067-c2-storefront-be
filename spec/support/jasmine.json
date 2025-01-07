@@ -1,12 +1,22 @@
 {
-  "spec_dir": "spec",
-  "spec_files": ["../**/tests/*[s]pec.ts"],
-  "helpers": ["helpers/**/*.js"],
+  "spec_dir": "dist/spec",
+  "spec_files": [
+    "src/**/*[sS]pec.[jt]s"
+  ],
+  "helpers": [
+    "helpers/**/*.[jt]s"
+  ],
   "reporters": [
     {
       "name": "jasmine-spec-reporter#SpecReporter",
       "options": {
-        "displayStacktrace": "all"
+        "displayStacktrace": "all",
+        "displaySpecDuration": true,
+        "displaySuiteNumber": true,
+        "colors": {
+          "enabled": true
+        },
+        "customProcessors": []
       }
     }
   ],

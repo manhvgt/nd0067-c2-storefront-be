@@ -41,7 +41,7 @@ export class UserModel {
       ]);
       conn.release();
       const newUser = result.rows[0];
-      const token = jwt.sign({ id: newUser.id, email: newUser.email }, JWT_SECRET as string, { expiresIn: '24h' });
+      const token = jwt.sign({ id: newUser.id, email: newUser.email }, JWT_SECRET as string, { expiresIn: '120h' });
       return token;
     } catch (err) {
       throw new Error(`Unable to create user: ${err}`);
@@ -141,7 +141,7 @@ export class UserModel {
       if (result.rows.length) {
         const user = result.rows[0];
         if (bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password_hash)) {
-          const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET as string, { expiresIn: '24h' });
+          const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET as string, { expiresIn: '120h' });
           conn.release();
           return token;
         }
