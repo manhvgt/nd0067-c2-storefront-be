@@ -100,7 +100,7 @@ export class BillModel {
       conn.release();
       if (result.rows.length === 0) {
         throw new Error('Bill not found');
-      }  
+      }
       return result.rows[0];
     } catch (err) {
       if (err instanceof Error && err.message === 'Bill not found') {

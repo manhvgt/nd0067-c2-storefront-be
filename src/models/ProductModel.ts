@@ -21,7 +21,7 @@ export class ProductModel {
         product.category,
         product.price,
         product.stock,
-        product.remark
+        product.remark,
       ]);
       conn.release();
       return result.rows[0];

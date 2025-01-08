@@ -19,18 +19,26 @@ describe('User Routes', () => {
 
   beforeAll(() => {
     // Generate a valid JWT token for testing
-    authToken = jwt.sign({ id: 1, email: 'owner@fpt.com' }, JWT_SECRET as string, { expiresIn: '120h' });
+    authToken = jwt.sign(
+      { id: 1, email: 'owner@fpt.com' },
+      JWT_SECRET as string,
+      { expiresIn: '120h' }
+    );
   });
 
   it('should get all users', async () => {
-    const response = await request(app).get('/users').set('Authorization', `Bearer ${authToken}`);
+    const response = await request(app)
+      .get('/users')
+      .set('Authorization', `Bearer ${authToken}`);
     expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array); 
+    expect(response.body).toBeInstanceOf(Array);
   });
 
   it('should get user by ID (Valid ID based on DB) or return error 404', async () => {
     const userId = 1; // Update ID based on test DB at the time of testing to get status 200
-    const response = await request(app).get(`/users/${userId}`).set('Authorization', `Bearer ${authToken}`);
+    const response = await request(app)
+      .get(`/users/${userId}`)
+      .set('Authorization', `Bearer ${authToken}`);
     if (response.status === 200) {
       expect(response.body.id).toBe(userId);
     } else {
@@ -47,7 +55,7 @@ describe('User Routes', () => {
       mobile: `0123${timestamp}`,
       gender: 'Male',
       role: 'Admin',
-      password: 'securepassword'
+      password: 'securepassword',
     };
     const response = await request(app).post('/users').send(newUser);
     expect(response.status).toBe(201);
@@ -63,15 +71,20 @@ describe('User Routes', () => {
       mobile: '123456789',
       gender: 'Female',
       role: 'Admin',
-      password: 'newpassword'
+      password: 'newpassword',
     };
-    const response = await request(app).put(`/users/${userId}`).set('Authorization', `Bearer ${authToken}`).send(updatedUser);
+    const response = await request(app)
+      .put(`/users/${userId}`)
+      .set('Authorization', `Bearer ${authToken}`)
+      .send(updatedUser);
     expect(response.status).toBe(200);
   });
 
   it('should delete user by ID (Valid ID based on DB) or return error 404', async () => {
     const userId = 9; // To Update ID based on test DB at the time of testing to get status 200
-    const response = await request(app).delete(`/users/${userId}`).set('Authorization', `Bearer ${authToken}`);
+    const response = await request(app)
+      .delete(`/users/${userId}`)
+      .set('Authorization', `Bearer ${authToken}`);
     if (response.status === 200) {
       expect(response.body.id).toBe(userId);
     } else {
@@ -87,7 +100,9 @@ describe('User Routes', () => {
   });
 
   it('should return 403 Forbidden when token is invalid', async () => {
-    const response = await request(app).get('/users').set('Authorization', 'Bearer invalidtoken');
+    const response = await request(app)
+      .get('/users')
+      .set('Authorization', 'Bearer invalidtoken');
     expect(response.status).toBe(403);
     expect(response.body.message).toBe('Forbidden');
   });

@@ -16,7 +16,6 @@ const port = parseInt(portStr, 10);
 
 app.use(bodyParser.json());
 
-
 app.use('/users', userRoutes);
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);

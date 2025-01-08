@@ -37,11 +37,15 @@ export class UserModel {
         user.mobile,
         user.gender,
         user.role,
-        hash
+        hash,
       ]);
       conn.release();
       const newUser = result.rows[0];
-      const token = jwt.sign({ id: newUser.id, email: newUser.email }, JWT_SECRET as string, { expiresIn: '120h' });
+      const token = jwt.sign(
+        { id: newUser.id, email: newUser.email },
+        JWT_SECRET as string,
+        { expiresIn: '120h' }
+      );
       return token;
     } catch (err) {
       throw new Error(`Unable to create user: ${err}`);
@@ -122,7 +126,7 @@ export class UserModel {
       conn.release();
       if (result.rows.length === 0) {
         throw new Error('User not found');
-      }  
+      }
       return result.rows[0];
     } catch (err) {
       if (err instanceof Error && err.message === 'User not found') {
@@ -140,8 +144,14 @@ export class UserModel {
       const result = await conn.query(sql, [email]);
       if (result.rows.length) {
         const user = result.rows[0];
-        if (bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password_hash)) {
-          const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET as string, { expiresIn: '120h' });
+        if (
+          bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password_hash)
+        ) {
+          const token = jwt.sign(
+            { id: user.id, email: user.email },
+            JWT_SECRET as string,
+            { expiresIn: '120h' }
+          );
           conn.release();
           return token;
         }

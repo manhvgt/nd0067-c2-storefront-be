@@ -44,7 +44,10 @@ export const create = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
   try {
     const product: Product = req.body;
-    const updatedProduct = await productModel.update(parseInt(req.params.id, 10), product);
+    const updatedProduct = await productModel.update(
+      parseInt(req.params.id, 10),
+      product
+    );
     res.json(updatedProduct);
   } catch (err) {
     responseError(res, err);
@@ -54,7 +57,9 @@ export const update = async (req: Request, res: Response) => {
 // Delete product by ID
 export const remove = async (req: Request, res: Response) => {
   try {
-    const deletedProduct = await productModel.delete(parseInt(req.params.id, 10));
+    const deletedProduct = await productModel.delete(
+      parseInt(req.params.id, 10)
+    );
     res.json(deletedProduct);
   } catch (err) {
     responseError(res, err);

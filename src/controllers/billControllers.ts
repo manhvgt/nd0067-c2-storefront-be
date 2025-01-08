@@ -55,7 +55,10 @@ export const create = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
   try {
     const bill: Bill = req.body;
-    const updatedBill = await billModel.update(parseInt(req.params.id, 10), bill);
+    const updatedBill = await billModel.update(
+      parseInt(req.params.id, 10),
+      bill
+    );
     res.json(updatedBill);
   } catch (err) {
     responseError(res, err);

@@ -43,7 +43,10 @@ export const create = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
   try {
     const user: User = req.body;
-    const updatedUser = await userModel.update(parseInt(req.params.id, 10), user);
+    const updatedUser = await userModel.update(
+      parseInt(req.params.id, 10),
+      user
+    );
     res.json(updatedUser);
   } catch (err) {
     responseError(res, err);

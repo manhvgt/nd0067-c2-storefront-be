@@ -23,11 +23,11 @@ export function authToken(req: Request, res: Response, next: NextFunction) {
   });
 }
 
-export function decodeToken(req: Request, res: Response) : DecodedToken  {
+export function decodeToken(req: Request, res: Response): DecodedToken {
   let decoded = {
     id: 0,
-    email: ""
-  }
+    email: '',
+  };
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) {
     res.status(401).json({ message: 'Unauthorized' });

@@ -19,7 +19,11 @@ describe('Product Routes', () => {
 
   beforeAll(() => {
     // Generate a valid JWT token for testing
-    authToken = jwt.sign({ id: 1, email: 'owner@fpt.com' }, JWT_SECRET as string, { expiresIn: '120h' });
+    authToken = jwt.sign(
+      { id: 1, email: 'owner@fpt.com' },
+      JWT_SECRET as string,
+      { expiresIn: '120h' }
+    );
     // console.debug(`${authToken}`);
   });
 
@@ -47,30 +51,38 @@ describe('Product Routes', () => {
       price: 1.2,
       category: 'Category',
       stock: 500,
-      remark: `${timestamp}`
+      remark: `${timestamp}`,
     };
-    const response = await request(app).post('/products').set('Authorization', `Bearer ${authToken}`).send(newProduct);
+    const response = await request(app)
+      .post('/products')
+      .set('Authorization', `Bearer ${authToken}`)
+      .send(newProduct);
     expect(response.status).toBe(201);
     expect(response.body.id).toBeDefined();
   });
 
-    it('should update product by ID (Valid ID based on DB) or return error 404', async () => {
+  it('should update product by ID (Valid ID based on DB) or return error 404', async () => {
     const productId = 1; // Update ID based on test DB at the time of testing to get status 200
     const updatedProduct = {
       name: 'Updated Product Name',
       price: 150.0,
       category: 'Updated Category',
       stock: 100,
-      remark: `${timestamp}`
+      remark: `${timestamp}`,
     };
-    const response = await request(app).put(`/products/${productId}`).set('Authorization', `Bearer ${authToken}`).send(updatedProduct);
+    const response = await request(app)
+      .put(`/products/${productId}`)
+      .set('Authorization', `Bearer ${authToken}`)
+      .send(updatedProduct);
     expect(response.status).toBe(200);
     expect(response.body.name).toBe('Updated Product Name');
   });
 
   it('should delete product by ID (Valid ID based on DB) or return error 404', async () => {
-    const productId = 100;  // To Update ID based on test DB at the time of testing to get status 200
-    const response = await request(app).delete(`/products/${productId}`).set('Authorization', `Bearer ${authToken}`);
+    const productId = 100; // To Update ID based on test DB at the time of testing to get status 200
+    const response = await request(app)
+      .delete(`/products/${productId}`)
+      .set('Authorization', `Bearer ${authToken}`);
     if (response.status === 200) {
       expect(response.body.id).toBe(productId);
     } else {
@@ -83,18 +95,21 @@ describe('Product Routes', () => {
     const response = await request(app).post('/products').send({
       name: 'Unauthorized Product',
       price: 100.0,
-      category: 'Unauthorized Category'
+      category: 'Unauthorized Category',
     });
     expect(response.status).toBe(401);
     expect(response.body.message).toBe('Unauthorized');
   });
 
   it('should return 403 Forbidden when token is invalid', async () => {
-    const response = await request(app).post('/products').set('Authorization', 'Bearer invalidtoken').send({
-      name: 'Invalid Token Product',
-      price: 100.0,
-      category: 'Invalid Token Category'
-    });
+    const response = await request(app)
+      .post('/products')
+      .set('Authorization', 'Bearer invalidtoken')
+      .send({
+        name: 'Invalid Token Product',
+        price: 100.0,
+        category: 'Invalid Token Category',
+      });
     expect(response.status).toBe(403);
     expect(response.body.message).toBe('Forbidden');
   });

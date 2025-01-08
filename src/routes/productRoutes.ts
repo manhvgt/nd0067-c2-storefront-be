@@ -1,6 +1,12 @@
 import express from 'express';
 import { authToken } from '../handlers/authHandler';
-import { index, show, create, update, remove } from '../controllers/productControllers';
+import {
+  index,
+  show,
+  create,
+  update,
+  remove,
+} from '../controllers/productControllers';
 
 const router = express.Router();
 

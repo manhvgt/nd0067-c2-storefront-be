@@ -15,8 +15,9 @@
   "type": "commonjs",
   "main": "server.ts",
   "scripts": {
-    "lint": "eslint . --ignore-pattern .gitignore",
-    "format": "prettier --write .",
+    "format:all": "prettier --write .",
+    "format:src": "prettier --write 'src/**/*.{js,ts,json}",
+    "format:spec": "prettier --write 'spec/**/*.{js,ts,json}",
     "clean": "tsc --build --clean",
     "build": "npm run clean && tsc --build",
     "test": "npm run build && npx jasmine --config=spec/support/jasmine.json",
@@ -34,6 +35,7 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.17.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^4.17.21",
@@ -51,7 +53,9 @@
     "globals": "^15.14.0",
     "jasmine": "^5.5.0",
     "jasmine-spec-reporter": "^7.0.0",
+    "jasmine-ts": "^0.4.0",
     "nodemon": "^3.1.9",
+    "pg-mock": "^1.0.1",
     "prettier": "^3.4.2",
     "supertest": "^7.0.0",
     "ts-node": "^10.9.2",

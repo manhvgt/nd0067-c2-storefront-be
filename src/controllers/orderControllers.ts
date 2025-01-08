@@ -55,7 +55,10 @@ export const create = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
   try {
     const order: Order = req.body;
-    const updatedOrder = await orderModel.update(parseInt(req.params.id, 10), order);
+    const updatedOrder = await orderModel.update(
+      parseInt(req.params.id, 10),
+      order
+    );
     res.json(updatedOrder);
   } catch (err) {
     responseError(res, err);
