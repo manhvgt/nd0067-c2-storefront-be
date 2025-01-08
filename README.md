@@ -72,8 +72,8 @@ Project Root Directory
 
 Before setting up and running this project, make sure below requirements are install and running in your environment.\
 - NodeJS & npm
-- docker desktop & docker-compose
-To install, run... Please go to project dirrectory and run below command on terminal (or cmd/windows powershell..).
+- docker desktop & docker-compose\
+To install, run... Go to project dirrectory and run below command on terminal (or cmd/windows powershell..).
 
 ### Setup
 
@@ -90,37 +90,37 @@ IMPORTANT NOTE: It is required that docker container is running and test DB is s
   `docker-compose up`
 
 - Create database\
-  `docker ps`
-  `docker exec -it <container_id> bash`
-  `psql -U postgres`
-  `CREATE DATABASE storedb;`
-  `CREATE DATABASE storedb_test;`
+  `docker ps`\
+  `docker exec -it <container_id> bash`\
+  `psql -U postgres`\
+  `CREATE DATABASE storedb;`\
+  `CREATE DATABASE storedb_test;`\
 
 - Import test db. The sample database can be found as `tests/storedb_test.dump`\
-  `docker ps`
-  `docker cp <path_to_host_machine_file.dump> <container_id>:/tmp/storedb_test.dump`
-  `docker exec -it <container_id> pg_restore -U postgres -d storedb_test -c /tmp/storedb_test.dump`
+  `docker ps`\
+  `docker cp <path_to_host_machine_file.dump> <container_id>:/tmp/storedb_test.dump`\
+  `docker exec -it <container_id> pg_restore -U postgres -d storedb_test -c /tmp/storedb_test.dump`\
 
 - Export test db (if-neccessary)\
-  `docker ps`
-  `docker exec -it <container_id> pg_dump -U postgres -d storedb_test -F c -f /tmp/storedb_test.dump`
-  `docker cp <container_id>:/tmp/storedb_test.dump <path_to_host_machine_file.dump>`
+  `docker ps`\
+  `docker exec -it <container_id> pg_dump -U postgres -d storedb_test -F c -f /tmp/storedb_test.dump`\
+  `docker cp <container_id>:/tmp/storedb_test.dump <path_to_host_machine_file.dump>`\
 
 #### Environment Variables
 - It is required to create an `.env` file with below content and put it in project root directory.\
 
-    SERVER_HOST='localhost'
-    SERVER_PORT=3000
-    POSTGRES_HOST='localhost'
-    POSTGRES_PORT=5432
-    POSTGRES_USER='postgres'
-    POSTGRES_PASSWORD='postgres'
-    POSTGRES_DB='storedb'
-    POSTGRES_TEST_DB='storedb_test'
-    NODE_ENV='test'
-    BCRYPT_PASSWORD='aSecretKey'
-    SALT_ROUNDS=10
-    JWT_SECRET='jwt_secret_key'
+    SERVER_HOST='localhost'\
+    SERVER_PORT=3000\
+    POSTGRES_HOST='localhost'\
+    POSTGRES_PORT=5432\
+    POSTGRES_USER='postgres'\
+    POSTGRES_PASSWORD='postgres'\
+    POSTGRES_DB='storedb'\
+    POSTGRES_TEST_DB='storedb_test'\
+    NODE_ENV='test'\
+    BCRYPT_PASSWORD='aSecretKey'\
+    SALT_ROUNDS=10\
+    JWT_SECRET='jwt_secret_key'\
 
 ### Build
 
