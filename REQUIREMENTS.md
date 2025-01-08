@@ -5,46 +5,89 @@ The company stakeholders want to create an online storefront to showcase their g
 These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application.
 
 ## API Endpoints
+All routes below are append from server root url, by default `http://localhost:3000`.\
+They are complied with RESTful regulation.
 
 #### Products
+`/products`
 
-- Index
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
+- `/products/ [GET]` Index: To get all products 
+- `/products/:id [GET]` Show: To get product details by ID
+- `/products/ [POST]` Create [token required]: To create new product
+- `/products/:id [PUT]` Update [token required]: To update product by ID
+- `/products/:id [DELETE]` Remove [token required]: To delete product by ID
 
 #### Users
+`/users`
 
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+- `/users/ [GET]` Index [token required]: To get all users 
+- `/users/:id [GET]` Show [token required]: To get user details by ID
+- `/users/ [POST]` Create: To create new user and return its token
+- `/users/:id [PUT]` Update [token required]: To update user by ID
+- `/users/:id [DELETE]` Remove [token required]: To delete user by ID
 
 #### Orders
+`/orders`
 
-- Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- `/orders/ [GET]` Index [token required]: To get all orders, which belongs to authenticated user (from token) 
+- `/orders/:id [GET]` Show [token required]: To get order details by ID
+- `/orders/ [POST]` Create [token required]: To create new order
+- `/orders/:id [PUT]` Update [token required]: To update order by ID
+- `/orders/:id [DELETE]` Remove [token required]: To delete order by ID
+
+#### Bills
+`/bills`
+
+- `/bills/ [GET]` Index [token required]: To get all bills, which belongs to authenticated user (from token) 
+- `/bills/:id [GET]` Show [token required]: To get bill details by ID
+- `/bills/ [POST]` Create [token required]: To create new bill
+- `/bills/:id [PUT]` Update [token required]: To update bill by ID
+- `/bills/:id [DELETE]` Remove [token required]: To delete bill by ID
+
 
 ## Data Shapes
 
 #### Product
+This Table is to store products and their information.
 
-- id
-- name
-- price
-- [OPTIONAL] category
+- id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY 
+- name VARCHAR(100) NOT NULL
+- category VARCHAR(100) NOT NULL
+- price NUMERIC(10 2) NOT NULL
+- stock INT NOT NULL
+- remark TEXT
 
 #### User
+This Table is to store users and their information.
 
-- id
-- firstName
-- lastName
-- password
+- id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+- first_name VARCHAR(100) NOT NULL
+- last_name VARCHAR(100) NOT NULL
+- email VARCHAR(100) NOT NULL UNIQUE
+- mobile VARCHAR(15) NOT NULL UNIQUE
+- gender VARCHAR(10) NOT NULL
+- role VARCHAR(50) NOT NULL
+- password_hash VARCHAR(255) NOT NULL
 
-#### Orders
+#### Order
+This Table is to store orders and their information. The order is for 01 products and belongs to 01 user.
 
-- id
-- id of each product in the order
-- quantity of each product in the order
-- user_id
-- status of order (active or complete)
+- id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+- product_id INT NOT NULL
+- user_id INT NOT NULL
+- quantity INT NOT NULL DEFAULT 1
+- status VARCHAR(50) NOT NULL
+- datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+- discount NUMERIC(5 2) DEFAULT 0
+- remark TEXT
+
+#### Bill
+This Table is to store bills and their information. The bill belonga to 01 user and contain all order for product(s).
+
+- id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+- user_id INT NOT NULL
+- order_ids INT[] NOT NULL
+- datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+- amount_original NUMERIC(10 2) NOT NULL
+- amount_payable NUMERIC(10 2) NOT NULL
+- status VARCHAR(50) NOT NULL
