@@ -46,6 +46,19 @@ export class OrderModel {
     }
   }
 
+  // Get orders by user ID
+  async getByUserId(userId: number): Promise<Order[]> {
+    try {
+      const conn = await pool.connect();
+      const sql = 'SELECT * FROM "Order" WHERE user_id=$1';
+      const result = await conn.query(sql, [userId]);
+      conn.release();
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Unable to get orders for user ID ${userId}: ${err}`);
+    }
+  }
+
   // Get order by ID
   async getById(id: number): Promise<Order> {
     try {

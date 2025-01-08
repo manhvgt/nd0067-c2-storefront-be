@@ -31,7 +31,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -122,7 +122,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -176,7 +176,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -234,7 +234,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -242,13 +242,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/products",
+							"raw": "localhost:3000/products/100",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"products"
+								"products",
+								"100"
 							]
 						},
 						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
@@ -278,7 +279,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -331,7 +332,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -348,14 +349,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/products/7",
+							"raw": "localhost:3000/products/1",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"products",
-								"7"
+								"1"
 							]
 						},
 						"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
@@ -385,7 +386,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -443,7 +444,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -540,7 +541,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -594,7 +595,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -652,7 +653,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -697,7 +698,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -750,7 +751,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]
@@ -804,7 +805,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3MzYyNzA1MTksImV4cCI6MTczNjM1NjkxOX0.fepIJ982X1GPtjsX_XsFblZScXvbbYByLoC4IDCT4Ms",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJvd25lckBmcHQuY29tIiwiaWF0IjoxNzM2MzQ3NzMzLCJleHAiOjE3MzY3Nzk3MzN9.-cWhokTgW8XtxlZJGw86MjmqZK4UZLfSFGR5EK-bxFQ",
 									"type": "string"
 								}
 							]

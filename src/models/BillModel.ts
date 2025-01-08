@@ -44,6 +44,19 @@ export class BillModel {
     }
   }
 
+  // Get all bills by user_id
+  async getByUserId(userId: number): Promise<Bill[]> {
+    try {
+      const conn = await pool.connect();
+      const sql = 'SELECT * FROM "Bill" WHERE user_id=$1';
+      const result = await conn.query(sql, [userId]);
+      conn.release();
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Unable to get bills for user ID ${userId}: ${err}`);
+    }
+  }
+
   // Get bill by ID
   async getById(id: number): Promise<Bill> {
     try {

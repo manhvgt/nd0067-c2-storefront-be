@@ -1,13 +1,25 @@
 import { Request, Response } from 'express';
 import { BillModel, Bill } from '../models/BillModel';
 import { responseError } from '../handlers/errorHandler';
+import { decodeToken } from '../handlers/authHandler';
 
 const billModel = new BillModel();
 
 // Show all bills
-export const index = async (req: Request, res: Response) => {
+export const getAll = async (req: Request, res: Response) => {
   try {
     const bills = await billModel.getAll();
+    res.json(bills);
+  } catch (err) {
+    responseError(res, err);
+  }
+};
+
+// Show all bills for the authenticated user
+export const index = async (req: Request, res: Response) => {
+  try {
+    const decoded = decodeToken(req, res);
+    const bills = await billModel.getByUserId(decoded.id);
     res.json(bills);
   } catch (err) {
     responseError(res, err);
@@ -21,7 +33,7 @@ export const show = async (req: Request, res: Response) => {
     if (bill) {
       res.json(bill);
     } else {
-      res.status(404).json({ message: 'Bill not found' });
+      res.status(404).json({ error: 'Bill not found' });
     }
   } catch (err) {
     responseError(res, err);

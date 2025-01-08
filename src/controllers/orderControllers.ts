@@ -1,13 +1,25 @@
 import { Request, Response } from 'express';
 import { OrderModel, Order } from '../models/OrderModel';
 import { responseError } from '../handlers/errorHandler';
+import { decodeToken } from '../handlers/authHandler';
 
 const orderModel = new OrderModel();
 
 // Show all orders
-export const index = async (req: Request, res: Response) => {
+export const getAll = async (req: Request, res: Response) => {
   try {
     const orders = await orderModel.getAll();
+    res.json(orders);
+  } catch (err) {
+    responseError(res, err);
+  }
+};
+
+// Show all orders for the authenticated user
+export const index = async (req: Request, res: Response) => {
+  try {
+    const decoded = decodeToken(req, res);
+    const orders = await orderModel.getByUserId(decoded.id);
     res.json(orders);
   } catch (err) {
     responseError(res, err);
@@ -21,7 +33,7 @@ export const show = async (req: Request, res: Response) => {
     if (order) {
       res.json(order);
     } else {
-      res.status(404).json({ message: 'Order not found' });
+      res.status(404).json({ error: 'Order not found' });
     }
   } catch (err) {
     responseError(res, err);
