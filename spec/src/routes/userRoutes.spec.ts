@@ -22,7 +22,6 @@ describe('User Routes', () => {
     authToken = jwt.sign({ id: 1, email: 'owner@fpt.com' }, JWT_SECRET as string, { expiresIn: '120h' });
   });
 
-  // TODO: Update ID based on test DB at the time of testing to get status 200
   it('should get all users', async () => {
     const response = await request(app).get('/users').set('Authorization', `Bearer ${authToken}`);
     expect(response.status).toBe(200);

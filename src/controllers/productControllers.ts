@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ProductModel, Product } from '../models/ProductModel';
 import { responseError } from '../handlers/errorHandler';
+import { error } from 'console';
 
 const productModel = new ProductModel();
 
@@ -21,7 +22,7 @@ export const show = async (req: Request, res: Response) => {
     if (product) {
       res.json(product);
     } else {
-      res.status(404).json({ message: 'Product not found' });
+      res.status(404).json({ error: 'Product not found' });
     }
   } catch (err) {
     responseError(res, err);
