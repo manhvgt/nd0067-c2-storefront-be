@@ -108,6 +108,7 @@ IMPORTANT NOTE: It is required that docker container is running and test DB is s
 
 #### Environment Variables
 - It is required to create an `.env` file with below content and put it in project root directory.\
+- Or refer `.env_sample` file as a sample.\
 
     SERVER_HOST='localhost'\
     SERVER_PORT=3000\
