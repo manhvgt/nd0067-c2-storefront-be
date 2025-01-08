@@ -86,28 +86,28 @@ To install, run... Please go to project dirrectory and run below command on term
 #### Config and start doker container for database
 IMPORTANT NOTE: It is required that docker container is running and test DB is setup before testing and running the server.
 
-- Start docker container
+- Start docker container\
   `docker-compose up`
 
-- Create database
+- Create database\
   `docker ps`
   `docker exec -it <container_id> bash`
   `psql -U postgres`
   `CREATE DATABASE storedb;`
   `CREATE DATABASE storedb_test;`
 
-- Import test db. The sample database can be found as `tests/storedb_test.dump`
+- Import test db. The sample database can be found as `tests/storedb_test.dump`\
   `docker ps`
   `docker cp <path_to_host_machine_file.dump> <container_id>:/tmp/storedb_test.dump`
   `docker exec -it <container_id> pg_restore -U postgres -d storedb_test -c /tmp/storedb_test.dump`
 
-- Export test db (if-neccessary)
+- Export test db (if-neccessary)\
   `docker ps`
   `docker exec -it <container_id> pg_dump -U postgres -d storedb_test -F c -f /tmp/storedb_test.dump`
   `docker cp <container_id>:/tmp/storedb_test.dump <path_to_host_machine_file.dump>`
 
 #### Environment Variables
-- It is required to create an `.env` file with below content and put it in project root directory.
+- It is required to create an `.env` file with below content and put it in project root directory.\
 
     SERVER_HOST='localhost'
     SERVER_PORT=3000
@@ -142,7 +142,7 @@ IMPORTANT NOTE: It is required that docker container is running and test DB is s
   `npm start`
 
 - Check result on console or confirm message when accessing to below url using web browser.\
-  `http://localhost:3000/`\
+  `http://localhost:3000/`
 
 ## Future development
 
