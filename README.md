@@ -110,18 +110,20 @@ IMPORTANT NOTE: It is required that docker container is running and test DB is s
 - It is required to create an `.env` file with below content and put it in project root directory.\
 - Or refer `.env_sample` file as a sample.\
 
-    SERVER_HOST='localhost'\
-    SERVER_PORT=3000\
-    POSTGRES_HOST='localhost'\
-    POSTGRES_PORT=5432\
-    POSTGRES_USER='postgres'\
-    POSTGRES_PASSWORD='postgres'\
-    POSTGRES_DB='storedb'\
-    POSTGRES_TEST_DB='storedb_test'\
-    NODE_ENV='test'\
-    BCRYPT_PASSWORD='aSecretKey'\
-    SALT_ROUNDS=10\
-    JWT_SECRET='jwt_secret_key'\
+<pre>
+SERVER_HOST='localhost'
+SERVER_PORT=3000
+POSTGRES_HOST='localhost'
+POSTGRES_PORT=5432
+POSTGRES_USER='postgres'
+POSTGRES_PASSWORD='postgres'
+POSTGRES_DB='storedb'
+POSTGRES_TEST_DB='storedb_test'
+NODE_ENV='test'
+BCRYPT_PASSWORD='aSecretKey'
+SALT_ROUNDS=10
+JWT_SECRET='jwt_secret_key'
+</pre>
 
 ### Build
 
