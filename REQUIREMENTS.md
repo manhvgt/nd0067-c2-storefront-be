@@ -52,9 +52,9 @@ There are 4 tables below.
 - Order
 - Bill
 Relationship between tables
-- 1 User has many Bill (User goes shopping many times in real life)
+- 1 User has many Bill (User do shopping many times, each time is 1 Bill)
 - 1 Bill has many Order 
-- 1 Order has 1 Product with quantity (To suppose that a split part of an order in real life) 
+- 1 Order is with a quantity of 1 Product (To suppose that a split part of an order in real life) 
 
 #### Product
 This Table is to store products and their information.
