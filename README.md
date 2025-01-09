@@ -22,7 +22,14 @@ Project Root Directory
 ├── images
 ├── spec
 │   ├── src
-│   │   ├── routes
+│   │   ├── models
+│   │   │   ├── BillModel.spec.ts
+│   │   │   ├── OrderModel.spec.ts
+│   │   │   ├── ProductModel.spec.ts
+│   │   │   └── UserModel.spec.ts
+│   │   └── routes
+│   │   │   ├── billRoutes.spec.ts
+│   │   │   ├── orderRoutes.spec.ts
 │   │   │   ├── productRoutes.spec.ts
 │   │   │   └── userRoutes.spec.ts
 │   ├── helpers
