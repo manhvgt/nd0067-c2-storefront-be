@@ -120,23 +120,3 @@ CREATE TABLE "Bill" (
     ON DELETE CASCADE
 );
 </pre>
-
-#### Order_products
-This table reflexs A one-to-many relationship between order and product. It contains a reference to the user_id and product_id both as foreign keys along with a quantity column.
-
-<pre>
-CREATE TABLE Order_products (
-  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  order_id INTEGER, 
-  product_id INTEGER, 
-  quantity INTEGER,
-  CONSTRAINT fk_order
-    FOREIGN KEY(order_id) 
-    REFERENCES "Order"(id)
-    ON DELETE CASCADE,
-  CONSTRAINT fk_product
-    FOREIGN KEY(product_id) 
-    REFERENCES "Product"(id)
-    ON DELETE CASCADE
-);
-</pre>

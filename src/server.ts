@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
 import productRoutes from './routes/productRoutes';
 import orderRoutes from './routes/orderRoutes';
-import orderProductsRoutes from './routes/orderProductsRoutes';
 import billRoutes from './routes/billRoutes';
 
 dotenv.config();
@@ -20,7 +19,6 @@ app.use(bodyParser.json());
 app.use('/users', userRoutes);
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
-app.use('/orderProducts', orderProductsRoutes);
 app.use('/bills', billRoutes);
 app.get('/', (req, res) => {
   res.send(`It works! Server is running on http://${host}:${port}`);
