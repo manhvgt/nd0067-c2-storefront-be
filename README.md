@@ -83,29 +83,6 @@ To install, run... Go to project dirrectory and run below command on terminal (o
 
 - Check installation result on terminal. If project installed successfull, `node_module` directory will be created without error.
 
-#### Config and start doker container for database
-IMPORTANT NOTE: It is required that docker container is running and test DB is setup before testing and running the server.
-
-- Start docker container\
-  `docker-compose up`
-
-- Create database\
-  `docker ps`\
-  `docker exec -it <container_id> bash`\
-  `psql -U postgres`\
-  `CREATE DATABASE storedb;`\
-  `CREATE DATABASE storedb_test;`\
-
-- Import test db. The sample database can be found as `tests/storedb_test.dump`\
-  `docker ps`\
-  `docker cp <path_to_host_machine_file.dump> <container_id>:/tmp/storedb_test.dump`\
-  `docker exec -it <container_id> pg_restore -U postgres -d storedb_test -c /tmp/storedb_test.dump`\
-
-- Export test db (if-neccessary)\
-  `docker ps`\
-  `docker exec -it <container_id> pg_dump -U postgres -d storedb_test -F c -f /tmp/storedb_test.dump`\
-  `docker cp <container_id>:/tmp/storedb_test.dump <path_to_host_machine_file.dump>`\
-
 #### Environment Variables
 - It is required to create an `.env` file with below content and put it in project root directory.\
 - Or refer `.env_sample` file as a sample.\
@@ -125,13 +102,45 @@ SALT_ROUNDS=10
 JWT_SECRET='jwt_secret_key'
 </pre>
 
+#### Start doker container for database
+IMPORTANT NOTE: It is required that docker container is running and database is setup before testing and running the server.
+
+- Start docker container\
+  `docker-compose up`\
+
+- Confirm that container is running and get actual value of `<container_id>`, replace it in other command.\
+  `docker ps`\
+
+#### Create database and import test database
+There Are 2 option to create database.
+- Option 1: Using db-migrate to create database and test database.\
+  `npx db-migrate up --migrations-dir ./migrations -e dev`\
+  `npx db-migrate up --migrations-dir ./migrations -e test`\
+
+- Option 2: Create database manually.\
+  `docker ps`\
+  `docker exec -it <container_id> bash`\
+  `psql -U postgres`\
+  `CREATE DATABASE storedb;`\
+  `CREATE DATABASE storedb_test;`\
+
+- Import test database for testing. The sample database can be found as `tests/storedb_test.dump`\
+  `docker ps`\
+  `docker cp <path_to_host_machine_file.dump> <container_id>:/tmp/storedb_test.dump`\
+  `docker exec -it <container_id> pg_restore -U postgres -d storedb_test -c /tmp/storedb_test.dump`\
+
+- Export test database (if-neccessary)\
+  `docker ps`\
+  `docker exec -it <container_id> pg_dump -U postgres -d storedb_test -F c -f /tmp/storedb_test.dump`\
+  `docker cp <container_id>:/tmp/storedb_test.dump <path_to_host_machine_file.dump>`\
+
 ### Build
 
 - To clean and rebuild project:\
   `npm run build`
 
 ### Test with Jasmine
-
+IMPORTANT NOTE: It is required that test database is imported before testing.\
 - To start running test:\
 `npm run test`
 - Check the test result on the console.

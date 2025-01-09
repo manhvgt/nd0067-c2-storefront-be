@@ -46,6 +46,15 @@ They are complied with RESTful regulation.
 
 
 ## Data Shapes
+There are 4 tables below.
+- Product
+- User
+- Order
+- Bill
+Relationship between tables
+- 1 User has many Bill (User goes shopping many times in real life)
+- 1 Bill has many Order 
+- 1 Order has 1 Product with quantity (To suppose that a split part of an order in real life) 
 
 #### Product
 This Table is to store products and their information.
