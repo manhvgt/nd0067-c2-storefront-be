@@ -50,44 +50,93 @@ They are complied with RESTful regulation.
 #### Product
 This Table is to store products and their information.
 
-- id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY 
-- name VARCHAR(100) NOT NULL
-- category VARCHAR(100) NOT NULL
-- price NUMERIC(10 2) NOT NULL
-- stock INT NOT NULL
-- remark TEXT
+<pre>
+CREATE TABLE "Product" (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  category VARCHAR(100) NOT NULL,
+  price NUMERIC(10, 2) NOT NULL,
+  stock INT NOT NULL,
+  remark TEXT
+);
+</pre>
+
 
 #### User
 This Table is to store users and their information.
 
-- id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
-- first_name VARCHAR(100) NOT NULL
-- last_name VARCHAR(100) NOT NULL
-- email VARCHAR(100) NOT NULL UNIQUE
-- mobile VARCHAR(15) NOT NULL UNIQUE
-- gender VARCHAR(10) NOT NULL
-- role VARCHAR(50) NOT NULL
-- password_hash VARCHAR(255) NOT NULL
+<pre>
+CREATE TABLE "User" (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  mobile VARCHAR(15) NOT NULL UNIQUE,
+  gender VARCHAR(10) NOT NULL,
+  role VARCHAR(50) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL
+);
+</pre>
 
 #### Order
 This Table is to store orders and their information. The order is for 01 products and belongs to 01 user.
 
-- id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
-- product_id INT NOT NULL
-- user_id INT NOT NULL
-- quantity INT NOT NULL DEFAULT 1
-- status VARCHAR(50) NOT NULL
-- datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-- discount NUMERIC(5 2) DEFAULT 0
-- remark TEXT
+<pre>
+CREATE TABLE "Order" (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  product_id INT NOT NULL,
+  user_id INT NOT NULL,
+  quantity INT NOT NULL DEFAULT 1,
+  status VARCHAR(50) NOT NULL,
+  datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  discount NUMERIC(5, 2) DEFAULT 0,
+  remark TEXT,
+  CONSTRAINT fk_product
+    FOREIGN KEY(product_id) 
+    REFERENCES "Product"(id)
+    ON DELETE CASCADE,
+  CONSTRAINT fk_user
+    FOREIGN KEY(user_id) 
+    REFERENCES "User"(id)
+    ON DELETE CASCADE
+);
+</pre>
 
 #### Bill
-This Table is to store bills and their information. The bill belonga to 01 user and contain all order for product(s).
+This Table is to store bills and their information. The bill belonga to 01 user and contain 1 or many orders for product.
 
-- id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
-- user_id INT NOT NULL
-- order_ids INT[] NOT NULL
-- datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-- amount_original NUMERIC(10 2) NOT NULL
-- amount_payable NUMERIC(10 2) NOT NULL
-- status VARCHAR(50) NOT NULL
+<pre>
+CREATE TABLE "Bill" (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id INT NOT NULL,
+  order_ids INT[] NOT NULL, /* This array contains all order_id in the bill (1 bill to many order relationship ) */
+  datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  amount_original NUMERIC(10, 2) NOT NULL,
+  amount_payable NUMERIC(10, 2) NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  CONSTRAINT fk_user
+    FOREIGN KEY(user_id) 
+    REFERENCES "User"(id)
+    ON DELETE CASCADE
+);
+</pre>
+
+#### Order_products
+This table reflexs A one-to-many relationship between order and product. It contains a reference to the user_id and product_id both as foreign keys along with a quantity column.
+
+<pre>
+CREATE TABLE Order_products (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  order_id INTEGER, 
+  product_id INTEGER, 
+  quantity INTEGER,
+  CONSTRAINT fk_order
+    FOREIGN KEY(order_id) 
+    REFERENCES "Order"(id)
+    ON DELETE CASCADE,
+  CONSTRAINT fk_product
+    FOREIGN KEY(product_id) 
+    REFERENCES "Product"(id)
+    ON DELETE CASCADE
+);
+</pre>
