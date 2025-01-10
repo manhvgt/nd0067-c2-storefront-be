@@ -119,17 +119,10 @@ IMPORTANT NOTE: It is required that docker container is running and database is 
   `docker ps`\
 
 #### Create database and import test database
-There Are 2 option to create database.
-- Option 1: Using db-migrate to create database and test database.\
+The database can be created/update and reset using db-migrate.\
+- To create database:\
   `npx db-migrate up --migrations-dir ./migrations -e dev`\
   `npx db-migrate up --migrations-dir ./migrations -e test`\
-
-- Option 2: Create database manually.\
-  `docker ps`\
-  `docker exec -it <container_id> bash`\
-  `psql -U postgres`\
-  `CREATE DATABASE storedb;`\
-  `CREATE DATABASE storedb_test;`\
 
 ### Build
 
