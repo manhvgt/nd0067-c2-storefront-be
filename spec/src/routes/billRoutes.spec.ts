@@ -1,8 +1,14 @@
 import request from 'supertest';
 import express from 'express';
 import billRoutes from '../../../src/routes/billRoutes';
-import { getCurrentDateTimestamp } from '../../../src/handlers/utils';
-import jwt from 'jsonwebtoken';
+import { BillModel, Bill } from '../../../src/models/BillModel';
+import { OrderModel, Order } from '../../../src/models/OrderModel';
+import { UserModel, User } from '../../../src/models/UserModel';
+import { ProductModel, Product } from '../../../src/models/ProductModel';
+import pool from '../../../src/database';
+import * as utils from '../../../src/handlers/utils';
+import { decodeTokenString } from '../../../src/handlers/authHandler';
+
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,18 +21,70 @@ app.use('/bills', billRoutes);
 
 describe('Bill Routes', () => {
   let authToken: string;
-  let timestamp = getCurrentDateTimestamp();
+  let billModel: BillModel;
+  let orderModel: OrderModel;
+  let userModel: UserModel;
+  let productModel: ProductModel;
+  let mockOrder: Order;
+  let mockBill: Bill;
 
-  beforeAll(() => {
+  const mockUser: User = {
+    first_name: 'Test',
+    last_name: 'User',
+    email: `${utils.randomEmail()}`,
+    mobile: `${utils.randomTimestamp()}`,
+    gender: 'Other',
+    role: 'User',
+    password: 'password123',
+  };
+  const mockProduct: Product = {
+    name: 'Test Product',
+    category: 'Model Test',
+    price: 100,
+    stock: 10,
+    remark: `${utils.getCurrentTimestamp()}`,
+  };
+
+  beforeAll(async() => {
+    billModel = new BillModel();
+    orderModel = new OrderModel();
+    userModel = new UserModel();
+    productModel = new ProductModel();
+    await pool.query('BEGIN');
+
+    const product = await productModel.create(mockProduct);
+
     // Generate a valid JWT token for testing
-    authToken = jwt.sign(
-      { id: 1, email: 'owner@fpt.com' },
-      JWT_SECRET as string,
-      { expiresIn: '120h' }
-    );
+    authToken = await userModel.create(mockUser);
+    const userId = decodeTokenString(authToken).id!;
+
+    mockOrder = {
+      product_id: product.id!,
+      user_id: userId,
+      quantity: 1,
+      status: 'Pending',
+      discount: 10,
+      remark: `Remark${utils.getCurrentTimestamp()}`
+    };
+    const order = await orderModel.create(mockOrder);
+    const orderId = order.id!;
+
+    mockBill = {
+      user_id: userId,
+      order_ids: [orderId],
+      amount_original: 100,
+      amount_payable: 90,
+      status: `Pending ${utils.getCurrentTimestamp()}`,
+    };
+
+  });
+  
+  afterAll(async () => {
+    await pool.query('ROLLBACK');
   });
 
   it('should get all bills, which belongs to authenticated user_id', async () => {
+    await billModel.create(mockBill);
     const response = await request(app)
       .get('/bills')
       .set('Authorization', `Bearer ${authToken}`);
@@ -35,7 +93,8 @@ describe('Bill Routes', () => {
   });
 
   it('should get bill by ID (Valid ID based on DB) or return error 404', async () => {
-    const billId = 18; // Update ID based on test DB at the time of testing to get status 200
+    const createdBill = await billModel.create(mockBill);
+    const billId = createdBill.id;
     const response = await request(app)
       .get(`/bills/${billId}`)
       .set('Authorization', `Bearer ${authToken}`);
@@ -48,40 +107,30 @@ describe('Bill Routes', () => {
   });
 
   it('should create a new bill', async () => {
-    const newBill = {
-      user_id: 1,
-      order_ids: [1, 2, 3],
-      amount_original: 1234.33,
-      amount_payable: 999.99,
-      status: `Pending ${timestamp}`,
-    };
     const response = await request(app)
       .post('/bills')
       .set('Authorization', `Bearer ${authToken}`)
-      .send(newBill);
+      .send(mockBill);
     expect(response.status).toBe(201);
     expect(response.body.id).toBeDefined();
   });
 
   it('should update bill by ID (Valid ID based on DB) or return error 404', async () => {
-    const billId = 1; // Update ID based on test DB at the time of testing to get status 200
-    const updatedBill = {
-      user_id: 1,
-      order_ids: [1, 2, 3],
-      amount_original: 1234.33,
-      amount_payable: 999.99,
-      status: `Updated ${timestamp}`,
-    };
+    const createdBill = await billModel.create(mockBill);
+    const billId = createdBill.id;
+    mockBill.status = `Updated ${utils.getCurrentTimestamp()}`;
+
     const response = await request(app)
       .put(`/bills/${billId}`)
       .set('Authorization', `Bearer ${authToken}`)
-      .send(updatedBill);
+      .send(mockBill);
     expect(response.status).toBe(200);
-    expect(response.body.status).toBe(`Updated ${timestamp}`);
+    expect(response.body.status).toBe(mockBill.status);
   });
 
   it('should delete bill by ID (Valid ID based on DB) or return error 404', async () => {
-    const billId = 7; // Update ID based on test DB at the time of testing to get status 200
+    const createdBill = await billModel.create(mockBill);
+    const billId = createdBill.id;
     const response = await request(app)
       .delete(`/bills/${billId}`)
       .set('Authorization', `Bearer ${authToken}`);

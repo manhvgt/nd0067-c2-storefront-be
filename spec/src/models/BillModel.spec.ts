@@ -1,32 +1,73 @@
 import { BillModel, Bill } from '../../../src/models/BillModel';
+import { OrderModel, Order } from '../../../src/models/OrderModel';
+import { UserModel, User } from '../../../src/models/UserModel';
+import { ProductModel, Product } from '../../../src/models/ProductModel';
 import pool from '../../../src/database';
-import { getCurrentTimestamp } from '../../../src/handlers/utils';
+import * as utils from '../../../src/handlers/utils';
+import { decodeTokenString } from '../../../src/handlers/authHandler';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 describe('BillModel with Test Database', () => {
   let billModel: BillModel;
+  let orderModel: OrderModel;
+  let userModel: UserModel;
+  let productModel: ProductModel;
+  let mockOrder: Order;
   let mockBill: Bill;
-  const timestamp = getCurrentTimestamp();
+
+  const mockUser: User = {
+    first_name: 'Test',
+    last_name: 'User',
+    email: `${utils.randomEmail()}`,
+    mobile: `${utils.randomTimestamp()}`,
+    gender: 'Other',
+    role: 'User',
+    password: 'password123',
+  };
+  const mockProduct: Product = {
+    name: 'Test Product',
+    category: 'Model Test',
+    price: 100,
+    stock: 10,
+    remark: `${utils.getCurrentTimestamp()}`,
+  };
 
   beforeAll(async () => {
     billModel = new BillModel();
+    orderModel = new OrderModel();
+    userModel = new UserModel();
+    productModel = new ProductModel();
     await pool.query('BEGIN');
 
+    const product = await productModel.create(mockProduct);
+    const token = await userModel.create(mockUser);
+    const userId = decodeTokenString(token).id!;
+    mockOrder = {
+      product_id: product.id!,
+      user_id: userId,
+      quantity: 1,
+      status: 'Pending',
+      discount: 10,
+      remark: `Remark${utils.getCurrentTimestamp()}`
+    };
+
+    const order = await orderModel.create(mockOrder);
+    const orderId = order.id!;
     mockBill = {
-      user_id: 1,
-      order_ids: [1, 2, 3],
+      user_id: userId,
+      order_ids: [orderId],
       amount_original: 100,
       amount_payable: 90,
-      status: `Pending ${timestamp}`,
+      status: `Pending ${utils.getCurrentTimestamp()}`,
     };
   });
 
-  afterEach(async () => {
-    await pool.query('ROLLBACK');
-    await pool.query('BEGIN');
-  });
+  // afterEach(async () => {
+  //   await pool.query('ROLLBACK');
+  //   await pool.query('BEGIN');
+  // });
 
   afterAll(async () => {
     await pool.query('ROLLBACK');
@@ -34,7 +75,7 @@ describe('BillModel with Test Database', () => {
 
   it('should create a new bill', async () => {
     const result = await billModel.create(mockBill);
-    expect(result.status).toEqual(`Pending ${timestamp}`);
+    expect(result.status).toEqual(mockBill.status);
   });
 
   it('should get a bill by ID', async () => {
@@ -62,7 +103,7 @@ describe('BillModel with Test Database', () => {
       order_ids: createdBill.order_ids,
       amount_original: 150,
       amount_payable: 135,
-      status: `Done ${timestamp}`,
+      status: `Done ${utils.getCurrentTimestamp()}`,
     };
     const updatedBill = await billModel.update(createdBill.id as number, updatedBillData);
     expect(updatedBill.status).toEqual(updatedBillData.status);

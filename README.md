@@ -131,23 +131,13 @@ There Are 2 option to create database.
   `CREATE DATABASE storedb;`\
   `CREATE DATABASE storedb_test;`\
 
-- Import test database for testing. The sample database can be found as `tests/storedb_test.dump`\
-  `docker ps`\
-  `docker cp <path_to_host_machine_file.dump> <container_id>:/tmp/storedb_test.dump`\
-  `docker exec -it <container_id> pg_restore -U postgres -d storedb_test -c /tmp/storedb_test.dump`\
-
-- Export test database (if-neccessary)\
-  `docker ps`\
-  `docker exec -it <container_id> pg_dump -U postgres -d storedb_test -F c -f /tmp/storedb_test.dump`\
-  `docker cp <container_id>:/tmp/storedb_test.dump <path_to_host_machine_file.dump>`\
-
 ### Build
 
 - To clean and rebuild project:\
   `npm run build`
 
 ### Test with Jasmine
-IMPORTANT NOTE: It is required that test database is imported before testing.\
+IMPORTANT NOTE: It is required that test database is created before testing.\
 - To start running test:\
 `npm run test`
 - Check the test result on the console.

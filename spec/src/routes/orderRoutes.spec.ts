@@ -1,8 +1,12 @@
 import request from 'supertest';
 import express from 'express';
 import orderRoutes from '../../../src/routes/orderRoutes';
-import { getCurrentDateTimestamp } from '../../../src/handlers/utils';
-import jwt from 'jsonwebtoken';
+import * as utils from '../../../src/handlers/utils';
+import { OrderModel, Order } from '../../../src/models/OrderModel';
+import { UserModel, User } from '../../../src/models/UserModel';
+import { ProductModel, Product } from '../../../src/models/ProductModel';
+import pool from '../../../src/database';
+import { decodeTokenString } from '../../../src/handlers/authHandler';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,18 +19,53 @@ app.use('/orders', orderRoutes);
 
 describe('Order Routes', () => {
   let authToken: string;
-  let timestamp = getCurrentDateTimestamp();
+  let orderModel: OrderModel;
+  let userModel: UserModel;
+  let productModel: ProductModel;
+  let mockOrder: Order;
+  const mockUser: User = {
+    first_name: 'Test',
+    last_name: 'User',
+    email: `${utils.randomEmail()}`,
+    mobile: `${utils.randomTimestamp()}`,
+    gender: 'Other',
+    role: 'User',
+    password: 'password123',
+  };
+  const mockProduct: Product = {
+    name: 'Test Product',
+    category: 'Model Test',
+    price: 100,
+    stock: 10,
+    remark: `${utils.getCurrentTimestamp()}`,
+  };
 
-  beforeAll(() => {
-    // Generate a valid JWT token for testing
-    authToken = jwt.sign(
-      { id: 1, email: 'owner@fpt.com' },
-      JWT_SECRET as string,
-      { expiresIn: '120h' }
-    );
+  beforeAll(async() => {
+    orderModel = new OrderModel();
+    userModel = new UserModel();
+    productModel = new ProductModel();
+    await pool.query('BEGIN');
+
+    const product = await productModel.create(mockProduct);
+    authToken = await userModel.create(mockUser);
+    const userId = decodeTokenString(authToken).id!;
+
+    mockOrder = {
+      product_id: product.id!,
+      user_id: userId,
+      quantity: 1,
+      status: 'Pending',
+      discount: 10,
+      remark: `Remark${utils.getCurrentTimestamp()}`
+    };
+  });
+
+  afterAll(async () => {
+    await pool.query('ROLLBACK');
   });
 
   it('should get all orders, which belongs to authenticated user_id', async () => {
+    await orderModel.create(mockOrder);
     const response = await request(app)
       .get('/orders')
       .set('Authorization', `Bearer ${authToken}`);
@@ -35,7 +74,8 @@ describe('Order Routes', () => {
   });
 
   it('should get order by ID (Valid ID based on DB) or return error 404', async () => {
-    const orderId = 1; // Update ID based on test DB at the time of testing to get status 200
+    const createdOrder = await orderModel.create(mockOrder);
+    const orderId = createdOrder.id;
     const response = await request(app)
       .get(`/orders/${orderId}`)
       .set('Authorization', `Bearer ${authToken}`);
@@ -48,38 +88,32 @@ describe('Order Routes', () => {
   });
 
   it('should create a new order', async () => {
-    const newOrder = {
-      product_id: 1,
-      user_id: 1,
-      quantity: 2,
-      status: 'Pending',
-      discount: 12.34,
-      remark: `${timestamp}`,
-    };
     const response = await request(app)
       .post('/orders')
       .set('Authorization', `Bearer ${authToken}`)
-      .send(newOrder);
+      .send(mockOrder);
     expect(response.status).toBe(201);
     expect(response.body.id).toBeDefined();
   });
 
   it('should update order by ID (Valid ID based on DB) or return error 404', async () => {
-    const orderId = 2; // Update ID based on test DB at the time of testing to get status 200
-    const updatedOrder = {
-      product_id: 1,
-      user_id: 1,
-      quantity: 2,
-      status: 'Done',
-      discount: 12.34,
-      remark: `Updated ${timestamp}`,
+    const createdOrder = await orderModel.create(mockOrder);
+    const orderId = createdOrder.id;
+    let updateOrder: Order;
+    updateOrder = {
+      product_id: mockOrder.product_id,
+      user_id: mockOrder.user_id,
+      quantity: 1,
+      status: 'Updated',
+      discount: 10,
+      remark: `Remark ${utils.getCurrentTimestamp()}`
     };
     const response = await request(app)
       .put(`/orders/${orderId}`)
       .set('Authorization', `Bearer ${authToken}`)
-      .send(updatedOrder);
+      .send(updateOrder);
     expect(response.status).toBe(200);
-    expect(response.body.remark).toBe(`Updated ${timestamp}`);
+    expect(response.body.remark).toBe(updateOrder.remark);
   });
 
   it('should delete order by ID (Valid ID based on DB) or return error 404', async () => {

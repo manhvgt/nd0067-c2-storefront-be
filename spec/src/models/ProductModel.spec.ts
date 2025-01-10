@@ -1,16 +1,15 @@
 import { ProductModel, Product } from '../../../src/models/ProductModel';
 import pool from '../../../src/database';
-import { getCurrentTimestamp } from '../../../src/handlers/utils';
+import * as utils from '../../../src/handlers/utils';
 
 describe('ProductModel with Test Database', () => {
     let productModel: ProductModel;
-    let timestamp = getCurrentTimestamp();
     const mockProduct: Product = {
         name: 'Test Product',
         category: 'Model Test',
         price: 100,
         stock: 10,
-        remark: `${timestamp}`,
+        remark: `${utils.getCurrentTimestamp()}`,
     };
 
     beforeAll(async () => {
@@ -29,7 +28,7 @@ describe('ProductModel with Test Database', () => {
 
     it('should create a new product', async () => {
         const result = await productModel.create(mockProduct);
-        expect(result.remark).toEqual(timestamp);
+        expect(result.remark).toEqual(mockProduct.remark);
     });
 
     it('should get a product by ID', async () => {

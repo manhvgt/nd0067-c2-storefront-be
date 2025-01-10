@@ -18,3 +18,20 @@ export function getCurrentDateTimestamp(): string {
 
   return `${year}${month}${day}${hours}${minutes}${seconds}`;
 }
+
+export function randomNumber(max: number): number {
+  return Math.floor(Math.random() * max) + 1;
+}
+
+export function randomTimestamp(): string {
+  const stamp = getCurrentTimestamp();
+  const rand = randomNumber(9999999);
+  return `${stamp}${rand}`;
+}
+
+export function randomEmail(): string {
+  const stamp = getCurrentDateTimestamp();
+  const rand = randomNumber(999999);
+  return `${stamp}_${rand}@email.com`;
+}
+

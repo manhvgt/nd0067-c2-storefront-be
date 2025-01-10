@@ -1,8 +1,10 @@
 import request from 'supertest';
 import express from 'express';
 import productRoutes from '../../../src/routes/productRoutes';
-import { getCurrentDateTimestamp } from '../../../src/handlers/utils';
-import jwt from 'jsonwebtoken';
+import { ProductModel, Product } from '../../../src/models/ProductModel';
+import { UserModel, User } from '../../../src/models/UserModel';
+import pool from '../../../src/database';
+import * as utils from '../../../src/handlers/utils';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,19 +17,40 @@ app.use('/products', productRoutes);
 
 describe('Product Routes', () => {
   let authToken: string;
-  let timestamp = getCurrentDateTimestamp();
+  let productModel: ProductModel;
+  let userModel: UserModel;
+  const mockProduct: Product = {
+      name: 'Test Product',
+      category: 'Model Test',
+      price: 100,
+      stock: 10,
+      remark: `${utils.getCurrentTimestamp()}`,
+  };
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    productModel = new ProductModel();
+    userModel = new UserModel();
+    await pool.query('BEGIN');
+
     // Generate a valid JWT token for testing
-    authToken = jwt.sign(
-      { id: 1, email: 'owner@fpt.com' },
-      JWT_SECRET as string,
-      { expiresIn: '120h' }
-    );
-    // console.debug(`${authToken}`);
+    const mockUser: User = {
+      first_name: 'Test',
+      last_name: 'User',
+      email: `${utils.randomEmail()}`,
+      mobile: `${utils.randomTimestamp()}`,
+      gender: 'Other',
+      role: 'User',
+      password: 'password123',
+    };
+    authToken = await userModel.create(mockUser);
+  });
+
+  afterAll(async () => {
+    await pool.query('ROLLBACK');
   });
 
   it('should get all products', async () => {
+    await productModel.create(mockProduct);
     const response = await request(app).get('/products');
     expect(response.status).toBe(200);
     expect(response.body).toBeInstanceOf(Array);
@@ -35,7 +58,8 @@ describe('Product Routes', () => {
 
   // TODO: Update ID based on test DB at the time of testing to get status 200
   it('should get product by ID (Valid ID based on DB) or return error 404', async () => {
-    const productId = 100;
+    const result = await productModel.create(mockProduct);
+    const productId = result.id;
     const response = await request(app).get(`/products/${productId}`);
     if (response.status === 200) {
       expect(response.body.id).toBe(productId);
@@ -51,7 +75,7 @@ describe('Product Routes', () => {
       price: 1.2,
       category: 'Category',
       stock: 500,
-      remark: `${timestamp}`,
+      remark: `${utils.getCurrentTimestamp()}`,
     };
     const response = await request(app)
       .post('/products')
@@ -62,13 +86,14 @@ describe('Product Routes', () => {
   });
 
   it('should update product by ID (Valid ID based on DB) or return error 404', async () => {
-    const productId = 1; // Update ID based on test DB at the time of testing to get status 200
+    const result = await productModel.create(mockProduct);
+    const productId = result.id;
     const updatedProduct = {
       name: 'Updated Product Name',
       price: 150.0,
       category: 'Updated Category',
       stock: 100,
-      remark: `${timestamp}`,
+      remark: `${utils.getCurrentTimestamp()}`,
     };
     const response = await request(app)
       .put(`/products/${productId}`)
@@ -79,7 +104,8 @@ describe('Product Routes', () => {
   });
 
   it('should delete product by ID (Valid ID based on DB) or return error 404', async () => {
-    const productId = 100; // To Update ID based on test DB at the time of testing to get status 200
+    const result = await productModel.create(mockProduct);
+    const productId = result.id;
     const response = await request(app)
       .delete(`/products/${productId}`)
       .set('Authorization', `Bearer ${authToken}`);

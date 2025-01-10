@@ -37,3 +37,12 @@ export function decodeToken(req: Request, res: Response): DecodedToken {
   decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
   return decoded;
 }
+
+export function decodeTokenString(token: string): DecodedToken {
+  let decoded = {
+    id: 0,
+    email: '',
+  };
+  decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
+  return decoded;
+}
